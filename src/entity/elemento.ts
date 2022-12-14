@@ -17,5 +17,8 @@ export class elemento extends BaseEntity {
     
     @Column()
     type: string;
+
+    @Column()
+    advisoryNumber: number;
 }
 
