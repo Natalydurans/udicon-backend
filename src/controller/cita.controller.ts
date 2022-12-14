@@ -18,7 +18,7 @@ export const CreateCita = async (req: Request, res: Response) => {
     fecha_cita: fecha_cita_date,
   });
 
-createAsesoria(req.body.id)
+createAsesoria(req.body.id , req.body.total)
 
   res.send(citaToSave);
 };
@@ -28,8 +28,8 @@ function updateStars(id: number, stars:number):void{
   const data = elemento.query(query)
 }
 
-function createAsesoria(id: number){
-  const query = 'INSERT INTO asesoria (id_cliente) VALUES ('+id+')'
+function createAsesoria(id: number , total: number){
+  const query = 'INSERT INTO asesoria (id_cliente , costo) VALUES ('+id+' , '+total+')'
   const data = elemento.query(query)
   const query2 = 'INSERT INTO historial_ase_cita (id_cita, id_asesoria) (SELECT MAX(id_cita), MAX(id_asesoria) FROM cita, asesoria )'
   elemento.query(query2)
@@ -44,7 +44,7 @@ export const GetCita = async (req: Request, res: Response) => {
 };
 
 export const Citas = async (req: Request, res: Response) => {
-  res.send(await elemento.query('SELECT c.id_cita, c.fecha_cita, c.hora_cita, u.user_name FROM cita c, historial_ase_cita h, asesoria a, usuario u WHERE c.id_cita = h.id_cita AND h.id_asesoria = a.id_asesoria AND a.id_cliente = u.id_usuario;'));
+  res.send(await elemento.query('SELECT c.id_cita, c.fecha_cita, c.hora_cita, u.user_name, a.costo FROM cita c, historial_ase_cita h, asesoria a, usuario u WHERE c.id_cita = h.id_cita AND h.id_asesoria = a.id_asesoria AND a.id_cliente = u.id_usuario;'));
 };
 
 export const UpdateCita = async (req: Request, res: Response) => {
